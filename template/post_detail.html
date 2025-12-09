@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="post-detail">
+    {% if post.image %}
+    <img src="{{ post.image.url }}" class="post-detail-img" alt="{{ post.title }}">
+    {% endif %}
+    <h1 class="detail-title">{{ post.title }}</h1>
+    <p class="post-detail-meta">
+        by <a href="">{{ post.author.user.username }}</a> •
+        {{ post.created_at|date:"M d, Y" }}
+    </p>
+
+    <p class="detail-body">{{ post.text }}</p>
+
+</div>
+
+<div class="comment-section glass-box">
+    <h2>Comments</h2>
+
+    {% for c in comments %}
+    <div class="comment">
+
+        <div class="comment-header">
+            <img src="{{ c.user.avatar.url }}" class="comment-avatar" alt="avatar">
+            <strong class="comment-author">{{ c.user }}</strong>
+            <span class="comment-time">{{ c.date_added|date:"H:i d M" }}</span>
+        </div>
+
+        <p class="comment-text">{{ c.body }}</p>
+
+        {% if user == c.user.user %}
+        <div class="comment-actions">
+            <a href="" class="edit-btn">Edit</a>
+            <a href="" class="delete-btn">Delete</a>
+        </div>
+        {% endif %}
+
+        <!-- Replies -->
+        <!--    {% for r in c.replies.all %}-->
+        <!--    <div class="reply">-->
+
+        <!--        <div class="comment-header">-->
+        <!--            <img src="{{ r.author.profile.image.url }}" class="comment-avatar" alt="avatar">-->
+        <!--            <strong class="comment-author">{{ r.author.username }}</strong>-->
+        <!--            <span class="comment-time">{{ r.created_at|date:"H:i d M" }}</span>-->
+        <!--        </div>-->
+
+        <!--        <p class="comment-text">{{ r.text }}</p>-->
+
+        <!--        {% if user == r.author %}-->
+        <!--            <div class="comment-actions">-->
+        <!--                <a href="{% url 'comment_edit' r.id %}" class="edit-btn">Edit</a>-->
+        <!--                <a href="{% url 'comment_delete' r.id %}" class="delete-btn">Delete</a>-->
+        <!--            </div>-->
+        <!--        {% endif %}-->
+        <!--    </div>-->
+        <!--    {% endfor %}-->
+
+    </div>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+    <form method="POST" class="comment-form">
+        {% csrf_token %}
+        <textarea name="body" placeholder="Write your comment..."></textarea>
+        <button class="btn-primary" type="submit">Send</button>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}

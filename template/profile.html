@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}{{ profile.user.username }}{% endblock %}
+
+{% block content %}
+
+<div class="profile-container">
+
+    <!-- Header -->
+    <div class="profile-header glass-box">
+        <img src="{{ profile.image.url }}" class="profile-avatar">
+
+        <div class="profile-info">
+            <h1 class="username">
+                {{ profile.user.username }}
+                {% if profile.is_online %}
+                    <span class="online-dot"></span>
+                {% endif %}
+            </h1>
+
+            <p class="bio">{{ profile.bio }}</p>
+
+            <div class="stats">
+                <span><strong>{{ posts.count }}</strong> Posts</span>
+                <span><strong>{{ profile.followers.count }}</strong> Followers</span>
+                <span><strong>{{ profile.following.count }}</strong> Following</span>
+            </div>
+
+            <!-- Follow / Edit buttons -->
+            <div class="profile-actions">
+                {% if request.user == profile.user %}
+                    <a href="{% url 'edit_profile' %}" class="btn-primary">Edit Profile</a>
+                {% else %}
+                    <form method="POST" action="{% url 'follow_toggle' profile.user.id %}">
+                        {% csrf_token %}
+                        {% if is_following %}
+                            <button class="btn-secondary">Unfollow</button>
+                        {% else %}
+                            <button class="btn-primary">Follow</button>
+                        {% endif %}
+                    </form>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Social links -->
+    {% if profile.facebook or profile.twitter or profile.instagram %}
+    <div class="profile-social glass-box">
+        {% if profile.instagram %}
+            <a href="{{ profile.instagram }}" target="_blank">Instagram</a>
+        {% endif %}
+        {% if profile.twitter %}
+            <a href="{{ profile.twitter }}" target="_blank">Twitter</a>
+        {% endif %}
+        {% if profile.facebook %}
+            <a href="{{ profile.facebook }}" target="_blank">Facebook</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- User Posts -->
+    <h2 class="section-title">Posts by {{ profile.user.username }}</h2>
+
+    <div class="profile-posts-grid">
+        {% for post in posts %}
+        <a href="{% url 'post_detail' post.slug %}" class="profile-post-card">
+            <img src="{{ post.image.url }}" class="post-thumb">
+            <h3>{{ post.title|truncatewords:8 }}</h3>
+            <span class="post-date">{{ post.date|date:"M d, Y h:i A" }}</span>
+        </a>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}

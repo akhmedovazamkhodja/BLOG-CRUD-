@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<h1 class="page-title">Explore The Latest Posts</h1>
+
+<div class="grid-posts">
+    {% for post in posts %}
+    <div class="post-card">
+        {% if post.image %}
+        <img src="{{ post.image.url }}" class="post-card-img" alt="{{ post.title }}">
+        {% endif %}
+        <div class="post-header">
+            <h2><a href="/post/{{ post.slug }}/">{{ post.title }}</a></h2>
+            <p class="post-meta">
+                by <a href="">{{ post.author.user.username }}</a> —
+                {{ post.date|date:"M d, Y h:i A" }}
+            </p>
+        </div>
+
+        <p class="post-excerpt">{{ post.text|truncatewords:25 }}</p>
+
+        <a href="{% url 'post_detail' post.slug %}" class="read-btn">Read More →</a>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

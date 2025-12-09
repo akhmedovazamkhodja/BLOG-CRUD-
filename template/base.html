@@ -1,0 +1,36 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MyBlog{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="/static/logo_site/my_vibes.png">
+</head>
+<body>
+
+<nav class="navbar glass-nav">
+    <div class="container nav-flex">
+        <a href="/" class="logo">MyBlog</a>
+
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="">Profile</a></li>
+            <li><a href="/chat/">Chat</a></li>
+
+            {% if user.is_authenticated %}
+                <li><a class="btn-outline" href="{% url 'sign_out' %}">Logout</a></li>
+            {% else %}
+                <li><a href="{% url 'sign_in' %}" class="btn-outline">Login</a></li>
+                <li><a href="{% url 'sign_up' %}" class="btn-primary">Sign Up</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<main class="container">
+    {% block content %}{% endblock %}
+</main>
+
+</body>
+</html>

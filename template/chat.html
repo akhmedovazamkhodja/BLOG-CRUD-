@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Chat{% endblock %}
+
+{% block content %}
+
+<h1 class="page-title">Messages</h1>
+
+<div class="chat-wrapper">
+
+    <div class="chat-box">
+        {% for msg in messages %}
+            <div class="chat-msg {% if msg.sender == request.user %}me{% endif %}">
+                <p>{{ msg.text }}</p>
+                <span>{{ msg.created_at|date:'H:i' }}</span>
+            </div>
+        {% endfor %}
+    </div>
+
+    <form method="POST" class="chat-form">
+        {% csrf_token %}
+        <input type="text" name="text" placeholder="Type your message...">
+        <button class="btn-primary">Send</button>
+    </form>
+
+</div>
+
+{% endblock %}

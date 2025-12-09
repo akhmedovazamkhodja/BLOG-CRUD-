@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+
+<div class="auth-card glass-box">
+    <h2>Create Account</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input name="username" type="text" placeholder="Username" required>
+        <input name='first_name' type="text" placeholder="First Name" required>
+        <input name='last_name' type="text" placeholder="Last Name" required>
+        <input name="password" type="password" placeholder="Password" required>
+        <input name="confirm_password" type="password" placeholder="Confirm Password" required>
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <button class="btn-primary full-btn" type="submit">Sign Up</button>
+    </form>
+
+    <p class="auth-switch">
+        Already have an account? <a href="{% url 'sign_in' %}">Sign In</a>
+    </p>
+</div>
+
+{% endblock %}
